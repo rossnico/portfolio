@@ -1,0 +1,407 @@
+<html lang="en">
+  	<head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <link rel="stylesheet" href="../css/pong.css">
+	</head>
+
+
+
+	<body>
+		<div id="score">
+			<span class="compteur" id="compteurj2"></span>
+			<span class="compteur" id="compteurj1"></span>
+		</div>
+		<div id="board">
+			<div id="menu">
+				<div class="button" id="boutonun">
+					UN JOUEUR
+				</div>
+				<div class="button" id="boutondeux">
+					DEUX JOUEURS
+				</div>
+			</div>
+			<div class="baton" id="baton1">
+			</div>
+			<div class="baton" id="baton2">
+			</div>
+			<div id="ball">
+			</div>
+		</div>
+		<div id="demo">
+		</div>
+		<div id="demo1">
+		</div>
+		<div id="demo2">
+		</div>
+		<div id="demo3">
+		</div>
+	</body>
+
+
+	<script>
+//Raccourcis element
+var menu = document.getElementById("menu");
+var boutonun = document.getElementById("boutonun");
+var boutondeux = document.getElementById("boutondeux");
+var gamemode = 0;
+
+//Variabilisation des fonctions
+		var moveBatonTwoP = function(){movebaton2(event)};
+		var moveBatonOneP = function(){movebaton1(event)};
+		var stopBatonAll = function(){stopbaton(event)};
+		var startTwoP = function(){twoPlayers()};
+		var startOneP = function(){onePlayer()};
+		var menuPrincipalFromOne = function(){displayMenu(1)};
+		var menuPrincipalFromTwo = function(){displayMenu(2)};
+//Menu Scores etc..
+		boutondeux.addEventListener("click",startTwoP);
+		boutonun.addEventListener("click",startOneP);
+
+		var pointj1=0;
+		var pointj2=0;
+		document.getElementById("compteurj1").innerHTML = pointj1;
+		document.getElementById("compteurj2").innerHTML = pointj2;
+
+		function score(joueur){
+			if (joueur==1){
+				pointj1++;
+				document.getElementById("compteurj1").innerHTML = pointj1;
+			}
+			if (joueur==2){
+				pointj2++;
+				document.getElementById("compteurj2").innerHTML = pointj2;
+			}
+		}
+
+
+//Pour bouger les bâtons
+		var baton1 = document.getElementById("baton1");
+		var inter1;
+		var inter2;
+		var pos1 = 41;
+		var pos2 = 41;
+		var moving1 = false;
+		var moving2 = false;
+
+
+		function movebaton2(event){
+			var key = event.keyCode;
+			if (key == 80 && moving1 == false){
+				inter1 = setInterval(baton11,0.01);
+				moving1 = true;
+			}
+
+			if (key == 77 && moving1 == false){
+				inter1 = setInterval(baton12,0.01);
+				moving1 = true;
+			}
+			
+			if (key == 65 && moving2 == false){
+				inter2 = setInterval(baton21,0.01);
+				moving2 = true;
+			}
+
+			if (key == 81 && moving2 == false){
+				inter2 = setInterval(baton22,0.01);
+				moving2 = true;
+			}
+		}
+
+
+		function movebaton1(event){
+			var key = event.keyCode;
+			if (key == 65 && moving2 == false){
+				inter2 = setInterval(baton21,0.01);
+				moving2 = true;
+			}
+
+			if (key == 81 && moving2 == false){
+				inter2 = setInterval(baton22,0.01);
+				moving2 = true;
+			}
+		}
+
+
+		function baton11(){
+			if(pos1>=0.5){
+				pos1 = pos1 - 0.2;
+				baton1.style.top = pos1+"%";
+				document.getElementById("demo").innerHTML = pos1;
+			}
+		}
+
+		function baton12(){
+			if(pos1<=81){
+				pos1 = pos1 + 0.2;
+				baton1.style.top = pos1+"%";
+				document.getElementById("demo").innerHTML = pos1;
+			}
+		}
+
+		function baton21(){
+			if(pos2>=0.5){
+				pos2 = pos2 - 0.2;
+				baton2.style.top = pos2+"%";
+			}
+		}
+
+		function baton22(){
+			if(pos2<=81){
+				pos2 = pos2 + 0.2;
+				baton2.style.top = pos2+"%";
+			}
+		}
+
+		function stopbaton(event){
+			if(event.keyCode == 80 || event.keyCode == 77){
+				clearInterval(inter1);
+				moving1 = false;
+			}
+
+			if(event.keyCode == 65 || event.keyCode == 81){
+				clearInterval(inter2);
+				moving2 = false;
+			}
+		}
+
+
+//Pour bouger la balle 
+		
+		var ball = document.getElementById("ball");
+		var posx = 50;
+		var posy = 50;
+		var movex;
+		var movey;
+		var directionx;
+		var angley;
+		var speedx = 0.2;
+		var speedy = 0.2;
+
+		function IAeasy(){
+			if (pos1<= posy-9){
+				baton12();//pour descendre
+			} else if (pos1>posy-9){
+				baton11();//pour monter
+			}
+				
+		}
+
+		function onePlayer(){
+			gamemode = 1;
+			document.getElementsByTagName("body")[0].addEventListener("keydown",moveBatonOneP);
+			document.getElementsByTagName("body")[0].addEventListener("keyup",stopBatonAll);
+			menu.style.display = "none";
+			resetBall();
+			setInterval(IAeasy,10);
+		}
+
+		function twoPlayers(){
+			//met en place le jeu
+			gamemode =2;
+			document.getElementsByTagName("body")[0].addEventListener("keydown",moveBatonTwoP);
+			document.getElementsByTagName("body")[0].addEventListener("keyup",stopBatonAll);			
+			menu.style.display = "none";
+			resetBall();
+		}
+
+		function resetBall(){
+			//start le jeu
+			document.getElementById("compteurj1").innerHTML = pointj1;
+			document.getElementById("compteurj2").innerHTML = pointj2;
+			posx = 50;
+			posy = 50;
+			ball.style.left = "50%";
+			ball.style.top = "50%";
+			var startx = Math.ceil(Math.random()*2);
+
+			if(pointj1<10 && pointj2<10){
+				if (startx == 1){
+					movex = setInterval(ballx2,0.2);
+				} else {
+					movex = setInterval(ballx1,0.2);
+				}
+				var starty = Math.ceil(Math.random()*5);
+				if (starty == 1){
+					movey = setInterval(bally1,10);
+				} else if (starty==2){
+					movey = setInterval(bally1,5);
+				} else if (starty==3){
+					movey = setInterval(bally2,5);
+				} else if (starty==3){
+					movey = setInterval(bally2,10);
+				}
+			} else {
+				endGame(gamemode);
+			}
+		}
+
+		function endGame(p_gamemode){
+				clearInterval(inter1);
+				clearInterval(inter2);
+				moving2 = false;
+				moving1 = false;
+				pointj1=0;
+				pointj2=0;
+				menu.style.display = "block";
+				boutonun.innerHTML = "MENU PRINCIPAL";
+				boutondeux.innerHTML = "REJOUER";
+				if (p_gamemode == 1){
+					boutonun.removeEventListener("click", startOneP);
+					boutondeux.removeEventListener("click", startTwoP);
+					boutondeux.addEventListener("click", startOneP);
+					boutonun.addEventListener("click", menuPrincipalFromOne);
+					document.getElementsByTagName("body")[0].removeEventListener("keydown",moveBatonOneP);
+					document.getElementsByTagName("body")[0].removeEventListener("keyup",stopBatonAll);
+				} else if(p_gamemode == 2){
+					boutonun.removeEventListener("click", startOneP);
+					boutonun.addEventListener("click", menuPrincipalFromTwo);
+					document.getElementsByTagName("body")[0].removeEventListener("keydown", moveBatonTwoP);
+					document.getElementsByTagName("body")[0].removeEventListener("keyup",stopBatonAll);	
+				}
+
+				pos1 = 41;
+				pos2 = 41;
+				baton1.style.top = pos1+"%";
+				baton2.style.top = pos2+"%";
+		}
+
+		function displayMenu(mode){
+			boutonun.innerHTML = "UN JOUEUR";
+			boutondeux.innerHTML = "DEUX JOUEURS";
+
+			if(mode == 1){
+				boutonun.removeEventListener("click", menuPrincipalFromOne);
+				boutondeux.removeEventListener("click", startOneP);
+				boutondeux.addEventListener("click",startTwoP);
+				boutonun.addEventListener("click",startOneP);
+			} else if (mode == 2){
+				boutonun.addEventListener("click",startOneP);
+				boutonun.removeEventListener("click",menuPrincipalFromTwo);
+			}
+		}
+
+		function ballx1(){
+			if (posx < 91.8){
+				posx = posx + speedx;
+				ball.style.left = posx+"%";
+			} else if (pos1 <= posy+3 && pos1 > posy-1.2){ //4.2
+				angley = 5;
+				clearIntervals();
+				movex = setInterval(ballx2,5);
+				movey = setInterval(bally1,angley);
+				increaseSpeed();
+			} else if (pos1 <= posy-1.2 && pos1 > posy-5.4){ //4.2
+				angley = 10;
+				clearIntervals();
+				movex = setInterval(ballx2,5);
+				movey = setInterval(bally1,angley);
+				increaseSpeed();
+			} else if (pos1 <= posy-5.4 && pos1 > posy-9.6){ //4.2
+				angley = 0;
+				clearIntervals();
+				movex = setInterval(ballx2,5);
+				increaseSpeed();
+			} else if (pos1 <= posy-9.6 && pos1 > posy-13.8){ //4.2
+				angley = 10;
+				clearIntervals();
+				movex = setInterval(ballx2,5);
+				movey = setInterval(bally2,angley);
+				increaseSpeed();
+			} else if (pos1 <= posy-13.8 && pos1 > posy-18){ //4.2
+				angley = 5;
+				clearIntervals();
+				movex = setInterval(ballx2,5);
+				movey = setInterval(bally2,angley);
+				increaseSpeed();
+			} else if(posx <99){
+				posx = posx + speedx;
+				ball.style.left = posx+"%";
+			} else {
+				score(1);
+				clearIntervals();
+				speedx = 0.2;
+				speedy = 0.2;
+				resetBall();
+			}
+		}
+
+		function ballx2(){
+			if (posx > 6.399){
+				posx = posx - speedx;
+				ball.style.left = posx+"%";
+			} else if (pos2 <= posy+3 && pos2 > posy-1.2){ //4.2
+				angley = 5;
+				clearIntervals();
+				movex = setInterval(ballx1,5);
+				movey = setInterval(bally1,angley);
+				increaseSpeed();
+			} else if (pos2 <= posy-1.2 && pos2 > posy-5.4){ //4.2
+				angley = 10;
+				clearIntervals();
+				movex = setInterval(ballx1,5);
+				movey = setInterval(bally1,angley);
+				increaseSpeed();
+			} else if (pos2 <= posy-5.4 && pos2 > posy-9.6){ //4.2
+				angley = 0;
+				clearIntervals();
+				movex = setInterval(ballx1,5);
+				increaseSpeed();
+			} else if (pos2 <= posy-9.6 && pos2 > posy-13.8){ //4.2
+				angley = 10;
+				clearIntervals();
+				movex = setInterval(ballx1,5);
+				movey = setInterval(bally2,angley);
+				increaseSpeed();
+			} else if (pos2 <= posy-13.8 && pos2 > posy-18){ //4.2
+				angley = 5;
+				clearIntervals();
+				movex = setInterval(ballx1,5);
+				movey = setInterval(bally2,angley);
+				increaseSpeed();
+			} else if(posx > 0){
+				posx = posx - speedx;
+				ball.style.left = posx+"%";
+			} else {
+				score(2);
+				clearIntervals();
+				speedx = 0.2;
+				speedy = 0.2;
+				resetBall();
+			}
+		}
+
+		function bally1(){
+			if (posy>0){
+				posy = posy - speedy;
+				ball.style.top = posy+"%";
+			} else {
+				clearInterval(movey);
+				movey = setInterval(bally2,angley)
+			}
+		}
+
+		function bally2(){
+			if (posy<97){
+				posy = posy + speedy;
+				ball.style.top = posy+"%";
+			} else {
+				clearInterval(movey);
+				movey = setInterval(bally1,angley);
+			}
+		}
+
+		function clearIntervals(){
+			clearInterval(movex);
+			clearInterval(movey);
+		}
+
+		function increaseSpeed(){
+			speedx+=0.01;
+			speedy+=0.01;
+		}
+
+	</script>
+
+</html>
+

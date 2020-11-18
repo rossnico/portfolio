@@ -1,0 +1,100 @@
+#score{
+	border: 2px solid white;
+	width: 80%;
+	height: 8%;
+	margin-top: 3%;
+	margin-left: 10%;
+	background-color: black;
+}
+#board{
+	height: 80%;
+	width: 80%;
+	margin: 0% 10% 5% 10%;
+	background-color: black;
+	border : 1px black solid;
+	position: relative;
+}
+
+.baton{
+	border: 2px white solid;
+	position: absolute;
+	height: 18%;
+	width: 1%;
+	background-color: white;
+}
+
+#baton1{
+	right: 5%;
+	top: 41%;
+}
+
+#baton2{
+	left: 5%;
+	top: 41%;
+}
+
+#ball{
+	position: absolute;
+	width:1.6%;
+	height:3%;
+	border:1px white solid;
+	border-radius: 100%;
+	left: 50%;
+	top: 50%;
+	background-color: white;
+}
+
+.compteur{
+	position: absolute;
+	font-family: fantasy;
+	height: 90%;
+	width: 3%;
+	font-size: 3em;
+	color:white;
+}
+
+#compteurj1{
+	margin-left: 2%;
+}
+#compteurj2{
+	margin-left: 95%;
+}
+
+#score{
+	position: relative;
+}
+
+#menu{
+	position: relative;
+	border: 1px white solid;
+	height: 20%;
+	width: 20%;
+	left: 40%;
+	top: 30%;
+	background-color: red;
+	display: block;
+}
+
+.button{
+	position: absolute;
+	border: 1px white solid;
+	width: 80%;
+	height: 40%;
+	left: 10%;
+	background-color: blue;
+	color: white;
+	text-align: center;
+}
+
+.button:hover{
+	cursor: pointer;
+	background-color: green;
+}
+
+#boutonun{
+	top: 8%;
+}
+
+#boutondeux{
+	top: 52%;
+}
