@@ -1,0 +1,7 @@
+.languageflag {
+    opacity: 0.2;
+}
+  
+.languageflag:hover {
+    opacity: 1;
+}
